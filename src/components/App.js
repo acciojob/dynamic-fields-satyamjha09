@@ -1,66 +1,66 @@
 import React, { useState } from "react";
-import './../styles/App.css';
 
 const App = () => {
-  const [fields, setFields] = useState([{ id: Date.now(), name: "", age: "" }]);
-
-  const handleChange = (id, event) => {
-    const { name, value } = event.target;
-    setFields((prevFields) =>
-      prevFields.map((field) =>
-        field.id === id ? { ...field, [name]: value } : field
-      )
-    );
-  };
+  const [fields, setFields] = useState([{ name: "", age: "" }]);
 
   const addField = () => {
-    setFields([...fields, { id: Date.now(), name: "", age: "" }]);
+    setFields([...fields, { name: "", age: "" }]);
   };
 
-  const removeField = (id) => {
-    setFields(fields.filter((field) => field.id !== id));
+  const removeField = (index) => {
+    if (fields.length > 1) {
+      const updatedFields = fields.filter((_, i) => i !== index);
+      setFields(updatedFields);
+    }
+  };
+
+  const handleChange = (index, event) => {
+    const { name, value } = event.target;
+    const updatedFields = [...fields];
+    updatedFields[index][name] = value;
+    setFields(updatedFields);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const submittedData = fields.map(({ id, ...rest }) => rest);
-    console.log("Submitted Data:", submittedData);
+    console.log("Submitted Data:", fields);
+    alert("Form submitted! Check the console.");
   };
-  
+
   return (
-    <div>
-      <h2>Dynamic Fields Form</h2>
+    <div className="container">
+      <h2>Dynamic Form</h2>
       <form onSubmit={handleSubmit}>
-        {fields.map((field) => (
-          <div key={field.id}>
-            <input 
+        {fields.map((field, index) => (
+          <div key={index} className="form-group">
+            <input
               type="text"
               name="name"
-              placeholder="Name"
+              placeholder="Enter Name"
               value={field.name}
-              onChange={(e) => handleChange(field.id, e)}
+              onChange={(e) => handleChange(index, e)}
               required
             />
-            <input 
+            <input
               type="number"
               name="age"
-              placeholder="Age"
+              placeholder="Enter Age"
               value={field.age}
-              onChange={(e) => handleChange(field.id, e)}
+              onChange={(e) => handleChange(index, e)}
               required
             />
-            <button type="button" onClick={() => removeField(field.id)}>
-              Remove
-            </button>
+            {fields.length > 1 && (
+              <button type="button" onClick={() => removeField(index)}>
+                Remove
+              </button>
+            )}
           </div>
         ))}
-        <button type="button" onClick={addField}>
-          Add Fields
-        </button>
+        <button type="button" onClick={addField}>Add More..</button>
         <button type="submit">Submit</button>
       </form>
     </div>
   );
-}
+};
 
 export default App;
