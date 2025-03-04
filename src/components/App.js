@@ -23,9 +23,10 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Submitted Data:", fields);
+    const submittedData = fields.map(({ id, ...rest }) => rest);
+    console.log("Submitted Data:", submittedData);
   };
-
+  
   return (
     <div>
       <h2>Dynamic Fields Form</h2>
