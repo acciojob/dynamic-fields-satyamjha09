@@ -1,62 +1,63 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
-export default function DynamicFieldsForm() {
-  const [fields, setFields] = useState([{ id: Date.now(), name: "", age: "" }]);
-
-  const handleChange = (id, event) => {
-    const { name, value } = event.target;
-    setFields((prevFields) =>
-      prevFields.map((field) =>
-        field.id === id ? { ...field, [name]: value } : field
-      )
-    );
-  };
-
-  const addField = () => {
-    setFields([...fields, { id: Date.now(), name: "", age: "" }]);
-  };
-
-  const removeField = (id) => {
-    setFields(fields.filter((field) => field.id !== id));
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("Submitted Data:", fields);
-  };
-
+const DynamicFieldsForm = () => {
+    const [fields, setFields] = useState([{ name: "", age: "" }]);
+    const addField = () => {
+        setFields([...fields, { name: "", age: "" }]);
+    };
+    
+    const removeField = (index) => {
+        setFields((prevFields) => prevFields.filter((_, i) => i !== index));
+    };
+    
+    const handleChange = (index, event) => {
+        const { name, value } = event.target;
+        setFields((prevFields) =>
+          prevFields.map((field, i) => (i === index ? { ...field, [name]: value } : field))
+        );
+    };
+    
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        console.log(fields); // ✅ Remove extra text to match Cypress expectation
+    };
+    
   return (
     <div>
-      <h2>Dynamic Fields Form</h2>
+      <h2>Dynamic Form</h2>
       <form onSubmit={handleSubmit}>
-        {fields.map((field) => (
-          <div key={field.id}>
+        {fields.map((field, index) => (
+          <div key={index} className="form-group">
             <input
               type="text"
               name="name"
-              placeholder="Name"
+              placeholder="Enter Name"
               value={field.name}
-              onChange={(e) => handleChange(field.id, e)}
+              onChange={(e) => handleChange(index, e)}
               required
             />
             <input
               type="number"
               name="age"
-              placeholder="Age"
+              placeholder="Enter Age"
               value={field.age}
-              onChange={(e) => handleChange(field.id, e)}
+              onChange={(e) => handleChange(index, e)}
               required
             />
-            <button type="button" onClick={() => removeField(field.id)}>
-              Remove
-            </button>
+            {fields.length > 1 && (
+              <button type="button" onClick={() => removeField(index)}>
+                Remove
+              </button>
+            )}
           </div>
         ))}
         <button type="button" onClick={addField}>
-          Add Field
+          Add More
         </button>
         <button type="submit">Submit</button>
       </form>
     </div>
-  );
+  )
 }
+
+export default DynamicFieldsForm
