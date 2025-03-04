@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import './../styles/App.css';
+import { useState } from "react";
 
-const App = () => {
+export default function DynamicFieldsForm() {
   const [fields, setFields] = useState([{ id: Date.now(), name: "", age: "" }]);
 
   const handleChange = (id, event) => {
@@ -32,7 +31,7 @@ const App = () => {
       <form onSubmit={handleSubmit}>
         {fields.map((field) => (
           <div key={field.id}>
-            <input 
+            <input
               type="text"
               name="name"
               placeholder="Name"
@@ -40,7 +39,7 @@ const App = () => {
               onChange={(e) => handleChange(field.id, e)}
               required
             />
-            <input 
+            <input
               type="number"
               name="age"
               placeholder="Age"
@@ -54,12 +53,10 @@ const App = () => {
           </div>
         ))}
         <button type="button" onClick={addField}>
-          Add Fields
+          Add Field
         </button>
         <button type="submit">Submit</button>
       </form>
     </div>
   );
 }
-
-export default App;
