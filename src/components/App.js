@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 const DynamicFieldsForm = () => {
+
   const [fields, setFields] = useState([{ name: "", age: "" }]);
 
   // Add a new empty field
@@ -28,7 +29,7 @@ const DynamicFieldsForm = () => {
   // Form Submission
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Submitted Data:", fields);
+    console.log(fields);
     alert("Form submitted! Check the console.");
   };
 
